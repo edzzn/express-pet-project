@@ -1,0 +1,13 @@
+extends layout
+block content
+  .antialiased.mx-auto.max-w-screen-lg.m-9
+    h1= message
+
+    if message==='404'
+      br
+      h4 
+        | Something went bad, there is still a change to 
+        a(href="/users").text-blue-600.underline get Back
+
+    h2= error.status
+    pre #{error.stack}
