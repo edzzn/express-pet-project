@@ -6,8 +6,10 @@ interface UserProps {
 }
 
 export interface UserDTO {
-  name: string;
-  // TODO: Add other properties
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
 }
 
 export class User {
@@ -23,12 +25,22 @@ export class User {
     this.password = props.password;
   }
 
+  toDTO(): UserDTO {
+    const userDTO: UserDTO = {
+      firstName: this.firstName,
+      lastName: this.lastName,
+      email: this.email,
+      password: this.password,
+    };
+    return userDTO;
+  }
+
   static fromDTO(userDTO: UserDTO) {
     return new User({
-      firstName: userDTO.name,
-      lastName: "",
-      email: "",
-      password: "",
+      firstName: userDTO.firstName || "",
+      lastName: userDTO.lastName || "",
+      email: userDTO.email,
+      password: userDTO.password,
     });
   }
 }

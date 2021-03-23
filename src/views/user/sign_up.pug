@@ -1,13 +1,21 @@
 extends ../layout
+block content_header
+  if warningMessage.message
+    .bg-yellow-100.border-l-4.border-yellow-500.text-yellow-700.p-4(role='alert')
+      p.font-bold Warning
+      p=warningMessage.message
+
 block content
   .flex.items-center.justify-center
     .max-w-md.w-full
       h2.m-6.text-center.text-3xl
         | Sign up
-      form(action='/signup' method='POST')
+      form(action='signup' method='POST')
         input#email-address.w-full.border.border-gray-300.p-3(name='email' type='email' required placeholder='Email address')
         input#password.w-full.border.border-gray-300.p-3(name='password' type='password' required placeholder='Password')
-        input#name.w-full.border.border-gray-300.p-3(name='name' type='text' required placeholder='Name')
+        .m-2
+        input#firstName.w-full.border.border-gray-300.p-3(name='firstName' type='text' required placeholder='First name')
+        input#lastName.w-full.border.border-gray-300.p-3(name='lastName' type='text' required placeholder='Last name')
 
         .mt-5
           button.w-full.text-white.bg-blue-600.p-3(type='submit') Sign up

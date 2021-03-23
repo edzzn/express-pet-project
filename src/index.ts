@@ -1,12 +1,13 @@
 import express from "express";
+import morgan from "morgan";
 import path from "path";
 import { mainRouter } from "./router";
-import morgan from "morgan";
 
 const app = express();
 const PORT = 8000;
 
 app.use(express.static(__dirname + "/../public"));
+app.use(express.urlencoded({ extended: true }));
 
 app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "views"));
