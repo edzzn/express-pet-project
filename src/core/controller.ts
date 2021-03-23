@@ -13,6 +13,6 @@ export function errorHandler(
 ) {
   res.locals.message = err.message;
   res.locals.error = process.env.ENV === "dev" ? err : {};
-  res.status(err.status);
+  res.status(err.status || 500);
   res.render("error");
 }

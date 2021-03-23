@@ -2,26 +2,26 @@ extends user_layout
 block user_content
   h1= `User: ${user.firstName} ${user.lastName}` 
 
+  .flex.m-2.float-right
+    a.rounded-r-none.px-4.py-2.rounded.bg-yellow-100.text-yellow-700.border(href=`users/${user.id}`)
+      .flex.leading-5 Edit
+    a.rounded-l-none.px-4.py-2.rounded.bg-red-100.text-red-700.border(href=`/users/${user.id}/delete`)
+      .flex.leading-5 Delete
+
+  br
+
   form(action='signup' method='POST').mt-5
     .mb-6
       label.block.mb-2.text-sm.text-gray-600(for='firstName') First Name
-      input#firstName.w-full.px-3.py-2.placeholder-gray-300.border.border-gray-300.rounded-md(type='text' name='firstName' required )
+      input#firstName.w-full.px-3.py-2.placeholder-gray-300.border.border-gray-300.rounded-md(type='text' name='firstName' required readonly value=`${user.firstName}`)
 
     .mb-6
       label.block.mb-2.text-sm.text-gray-600(for='lastName') Last Name
-      input#lastName.w-full.px-3.py-2.placeholder-gray-300.border.border-gray-300.rounded-md(type='text' name='lastName' required )
+      input#lastName.w-full.px-3.py-2.placeholder-gray-300.border.border-gray-300.rounded-md(type='text' name='lastName' required readonly value=`${user.lastName}`)
 
     .mb-6
       label.block.mb-2.text-sm.text-gray-600(for='email') email 
-      input#email.w-full.px-3.py-2.placeholder-gray-300.border.border-gray-300.rounded-md(type='email' name='email'  required )
-
-    .mb-6
-      label.block.mb-2.text-sm.text-gray-600(for='password') Password
-      input#password.w-full.px-3.py-2.placeholder-gray-300.border.border-gray-300.rounded-md(type='password' name='password' required )
-
-    .mb-6
-      button.w-full.px-3.py-4.text-white.bg-indigo-500.rounded-md(type='submit') Edit
-
+      input#email.w-full.px-3.py-2.placeholder-gray-300.border.border-gray-300.rounded-md(type='email' name='email'  required readonly value=`${user.email}`)
 
 block debug
   p= debugMessage
