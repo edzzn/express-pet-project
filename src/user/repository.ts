@@ -1,3 +1,4 @@
+import Model from "sequelize/types/lib/model";
 import { User as UserModelCtor } from "../models/sequelize";
 import { User, UserDTO } from "./user";
 
@@ -9,16 +10,7 @@ export class UsersRepository {
 
     if (!users) throw new Error("Error fetching all users");
 
-    const usersDTO: UserDTO[] = users.map((user) => {
-      const userDTO: UserDTO = {
-        firstName: user.getDataValue("firstName"),
-        lastName: user.getDataValue("lastName"),
-        email: user.getDataValue("email"),
-        password: user.getDataValue("password"),
-      };
-      return userDTO;
-    });
-
+    const usersDTO: UserDTO[] = users.map(userModelToUserDTO);
     return usersDTO;
   }
 
@@ -26,22 +18,28 @@ export class UsersRepository {
     const user = await UserModelCtor.findByPk(userID);
     if (!user) throw new Error("Error fetching user by id");
 
-    const userDTO: UserDTO = {
-      firstName: user.getDataValue("firstName"),
-      lastName: user.getDataValue("lastName"),
-      email: user.getDataValue("email"),
-      password: user.getDataValue("password"),
-    };
-
-    return userDTO;
+    return userModelToUserDTO(user);
   }
 
   static async createUser(user: User): Promise<UserDTO> {
     const userDTO = user.toDTO();
     const newUser = await UserModelCtor.create(userDTO);
-
     if (!newUser) throw new Error("Error creating user");
 
     return userDTO;
   }
+}
+
+function userModelToUserDTO(user: Model<any, any>): UserDTO {
+  const userDTO: UserDTO = {
+    id: user.getDataValue("id"),
+    firstName: user.getDataValue("firstName"),
+    lastName: user.getDataValue("lastName"),
+    email: user.getDataValue("email"),
+    password: user.getDataValue("password"),
+    createdAt: user.getDataValue("createdAt"),
+    updatedAt: user.getDataValue("updatedAt"),
+  };
+
+  return userDTO;
 }
