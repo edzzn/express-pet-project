@@ -1,11 +1,12 @@
 import express from "express";
 export const userRouter = express.Router();
+import { User } from "../models/sequelize";
 
-userRouter.get("/", (req, res) => {
-  res.render("user/list_users", {
-    title: "users",
-    debugMessage: "I can now send params",
+userRouter.get("/", async (req, res) => {
+  const users = await User.findAll({
+    limit: 6,
   });
+  res.render("user/list_users", { title: `User List`, users: users });
 });
 
 userRouter.get("/:id", (req, res) => {
