@@ -18,3 +18,7 @@ export async function getUserByID(req: Request, res: Response) {
 
   res.render("user/profile", { title: `User: ${userId}`, user: user });
 }
+
+export function getUserSignUp(req: Request, res: Response) {
+  res.render("user/sign_up");
+}
