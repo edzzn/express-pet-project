@@ -1,7 +1,33 @@
-extends ../layout
-block content
-  p !TODO: PASS USER LIST: 
-  p= JSON.stringify(users)
+extends user_layout
+block user_content
+  h1 Users
+  a.rounded-r-none.px-4.py-2.rounded.bg-blue-100.text-blue-700.border.float-right(href=`users/create`) + Add user
+  br
+
+
+  table.table-auto.w-full.mt-12
+    thead
+      tr
+        th Name
+        th Email
+        th Created At
+        th Actions
+    tbody
+      for user in users
+        tr.pt-4.pb-4
+          td= `${user.firstName} ${user.lastName}`
+          td= user.email
+          td= user.createdAt
+          td
+            .flex.m-2
+              a.rounded-r-none.px-4.py-2.rounded.bg-blue-100.text-blue-700.border(href=`users/${user.id}`)
+                .flex.leading-5 View
+              a.rounded-l-none.rounded-r-none.border-l-0.border-r-0.px-4.py-2.rounded.bg-yellow-100.text-yellow-700.border(href=`users/${user.id}/edit`)
+                .flex.leading-5 Edit
+              a.rounded-l-none.px-4.py-2.rounded.bg-red-100.text-red-700.border(href=`/users/${user.id}/delete`)
+                .flex.leading-5 Delete
+
+
 
 block debug
   p= debugMessage

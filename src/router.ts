@@ -3,4 +3,4 @@ import { userRouter } from "./user/router";
 
 export const mainRouter = express.Router();
 
-mainRouter.use("/user", userRouter);
+mainRouter.use("/users", userRouter);

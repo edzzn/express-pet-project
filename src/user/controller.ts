@@ -38,14 +38,14 @@ export async function postUserSignUp(req: Request, res: Response) {
     const user: User = new User({ email, password, firstName, lastName });
 
     await UsersRepository.createUser(user);
-    res.redirect("/user");
+    res.redirect("/users");
   } else {
     const warningMessage = "There was an error signing up, please try again";
 
     res.redirect(
       // TODO: replace deprecated
       url.format({
-        pathname: "/user/signup/",
+        pathname: "/users/signup/",
         query: {
           error: warningMessage,
         },
