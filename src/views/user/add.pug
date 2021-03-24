@@ -1,12 +1,13 @@
 extends user_layout
+
+block content_header
+  .flex.justify-between
+    div.flex
+      a(href='/users')
+        h1.text-blue-600.underline.mr-2 Users/
+      h1 Add user
+
 block user_content
-  div.flex
-    a(href='/users')
-      h1.text-blue-600.underline.mr-2 Users/
-    h1 Add user 
-
-  br
-
   form(action='add' method='POST').mt-5
     .mb-6
       label.block.mb-2.text-sm.text-gray-600(for='firstName') First Name

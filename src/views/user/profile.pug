@@ -1,18 +1,19 @@
 extends user_layout
+
+
+block content_header
+  .flex.justify-between
+    .flex
+      a(href='/users')
+        h1.text-blue-600.underline.mr-2 Users/
+      h1= `${user.firstName} ${user.lastName}` 
+    .flex
+      a.rounded-r-none.p-4.rounded.bg-yellow-100.text-yellow-700.border(href=`/users/${user.id}/edit`)
+        .flex.leading-5 Edit
+      a.rounded-l-none.p-4.rounded.bg-red-100.text-red-700.border(href=`/users/${user.id}/delete`)
+        .flex.leading-5 Delete
+
 block user_content
-  .flex
-    a(href='/users')
-      h1.text-blue-600.underline.mr-2 Users/
-    h1= `${user.firstName} ${user.lastName}` 
-
-  .flex.m-2.float-right
-    a.rounded-r-none.px-4.py-2.rounded.bg-yellow-100.text-yellow-700.border(href=`/users/${user.id}/edit`)
-      .flex.leading-5 Edit
-    a.rounded-l-none.px-4.py-2.rounded.bg-red-100.text-red-700.border(href=`/users/${user.id}/delete`)
-      .flex.leading-5 Delete
-
-  br
-
   form.mt-5
 
     .mb-6

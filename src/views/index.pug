@@ -1,0 +1,16 @@
+extends layout
+block content
+  .antialiased.mx-auto.max-w-screen-lg.m-9
+    h1 Express app
+
+    br
+
+    ul
+      li
+        h4 
+          a(href="/users").text-blue-600.underline Users
+      li
+        h4 
+          a(href="/signin").text-blue-600.underline.mr-3 Sign in
+          | or
+          a(href="/signup").text-blue-600.underline.ml-3 Sign up
