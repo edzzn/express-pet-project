@@ -28,6 +28,20 @@ export class UsersRepository {
 
     return userDTO;
   }
+
+  static async updateUser(userWithChanges: User): Promise<UserDTO> {
+    const user = await UserModelCtor.findByPk(userWithChanges.id);
+    if (!user) throw new Error("Error updating user by id, user not found");
+    const updatedUser = await user.update(userWithChanges.toDTO());
+    if (!updatedUser) throw new Error("Error updating user, unexpected");
+
+    return userModelToUserDTO(updatedUser);
+  }
+
+  static async deleteUseById(userID: string): Promise<void> {
+    await UserModelCtor.destroy({ where: { id: userID } });
+    return;
+  }
 }
 
 function userModelToUserDTO(user: Model<any, any>): UserDTO {

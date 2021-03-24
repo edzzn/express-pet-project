@@ -53,3 +53,52 @@ export async function postUserSignUp(req: Request, res: Response) {
     );
   }
 }
+
+export function getUserAdd(req: Request, res: Response) {
+  res.render("user/add", { title: `Add user` });
+}
+
+export async function postUserAdd(req: Request, res: Response) {
+  const userWithChanges = new User({
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+    password: req.body.password,
+  });
+  await UsersRepository.createUser(userWithChanges);
+
+  res.redirect("/users");
+}
+
+export async function getUserEditByID(req: Request, res: Response) {
+  const userId = req.params.id;
+  const userDTO = await UsersRepository.findUserById(userId);
+
+  const user = User.fromDTO(userDTO);
+
+  res.render("user/edit", { title: `Edit user: ${userId}`, user: user });
+}
+
+export async function postUserEditByID(req: Request, res: Response) {
+  const userWithChanges = new User({
+    id: req.params.id,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+    password: req.body.password,
+  });
+
+  const userDTO = await UsersRepository.updateUser(userWithChanges);
+
+  const updatedUser = User.fromDTO(userDTO);
+
+  res.redirect(`/users/${updatedUser.id}/edit`);
+}
+
+export async function getDeleteUserByID(req: Request, res: Response) {
+  const userId = req.params.id;
+  await UsersRepository.deleteUseById(userId);
+
+  // TODO: Add success messages (flash-express)
+  res.redirect("/users");
+}
