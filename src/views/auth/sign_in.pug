@@ -1,0 +1,16 @@
+extends auth_layout
+
+block content_header
+  .flex
+    a(href='/')
+      h1.text-blue-600.underline.mr-2 /
+    h1 Sign In
+
+block auth_content
+  .flex.items-center.justify-center
+    form(action='signin' method='POST').max-w-md
+      input#email-address.w-full.border.border-gray-300.p-3(name='email' type='email' required placeholder='Email address')
+      input#password.w-full.border.border-gray-300.p-3(name='password' type='password' required placeholder='Password')
+
+      .mt-5
+        button.w-full.text-white.bg-blue-600.p-3(type='submit') Sign in
