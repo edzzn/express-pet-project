@@ -1,0 +1,43 @@
+extends user_layout
+block user_content
+  div.flex
+    a(href='/users')
+      h1.text-blue-600.underline.mr-2 Users/
+    h1= `Edit: ${user.firstName} ${user.lastName}` 
+
+  .flex.m-2.float-right
+    a.px-4.py-2.rounded.bg-red-100.text-red-700.border(href=`/users/${user.id}/delete`)
+      .flex.leading-5 Delete
+
+  br
+
+  form(action='edit' method='POST').mt-5
+    .mb-6
+      label.block.mb-2.text-sm.text-gray-600(for='id') User Id
+      input#id.w-full.px-3.py-2.placeholder-gray-300.border.border-gray-300.rounded-md.text-gray-500(type='text' name='id' required  readonly value=`${user.id}`)
+
+    .mb-6
+      label.block.mb-2.text-sm.text-gray-600(for='firstName') First Name
+      input#firstName.w-full.px-3.py-2.placeholder-gray-300.border.border-gray-300.rounded-md(type='text' name='firstName' required value=`${user.firstName}`)
+
+    .mb-6
+      label.block.mb-2.text-sm.text-gray-600(for='lastName') Last Name
+      input#lastName.w-full.px-3.py-2.placeholder-gray-300.border.border-gray-300.rounded-md(type='text' name='lastName' required value=`${user.lastName}`)
+
+    .mb-6
+      label.block.mb-2.text-sm.text-gray-600(for='email') email 
+      input#email.w-full.px-3.py-2.placeholder-gray-300.border.border-gray-300.rounded-md(type='email' name='email' required value=`${user.email}`)
+
+    .mb-6
+      label.block.mb-2.text-sm.text-gray-600(for='updatedAt') Last updated 
+      input#updatedAt.w-full.px-3.py-2.placeholder-gray-300.border.border-gray-300.rounded-md.text-gray-500(type='text' name='updatedAt' required readonly value=`${user.updatedAt}`)
+
+    .mb-6
+      label.block.mb-2.text-sm.text-gray-600(for='createdAt') Created at 
+      input#createdAt.w-full.px-3.py-2.placeholder-gray-300.border.border-gray-300.rounded-md.text-gray-500(type='text' name='createdAt' required readonly value=`${user.createdAt}`)
+
+    .mb-6
+      button.w-full.text-white.bg-blue-600.p-3(type='submit') Update
+
+block debug
+  p= debugMessage

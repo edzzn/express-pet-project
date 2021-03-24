@@ -9,6 +9,7 @@ const PORT = 8000;
 
 app.use(express.static(__dirname + "/../public"));
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "views"));

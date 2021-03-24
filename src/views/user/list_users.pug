@@ -1,7 +1,7 @@
 extends user_layout
 block user_content
   h1 Users
-  a.rounded-r-none.px-4.py-2.rounded.bg-blue-100.text-blue-700.border.float-right(href=`users/create`) + Add user
+  a.rounded-r-none.px-4.py-2.rounded.bg-blue-100.text-blue-700.border.float-right(href=`users/add`) + Add user
   br
 
 
@@ -20,7 +20,7 @@ block user_content
           td= user.createdAt
           td
             .flex.m-2
-              a.rounded-r-none.px-4.py-2.rounded.bg-blue-100.text-blue-700.border(href=`users/${user.id}`)
+              a.rounded-r-none.px-4.py-2.rounded.bg-blue-100.text-blue-700.border(href=`/users/${user.id}`)
                 .flex.leading-5 View
               a.rounded-l-none.rounded-r-none.border-l-0.border-r-0.px-4.py-2.rounded.bg-yellow-100.text-yellow-700.border(href=`users/${user.id}/edit`)
                 .flex.leading-5 Edit
