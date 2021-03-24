@@ -1,3 +1,6 @@
+import bcrypt from "bcrypt";
+const saltRounds = 10;
+
 interface UserProps {
   id?: string;
   firstName: string;
@@ -27,7 +30,11 @@ export class User {
   createdAt?: Date;
   updatedAt?: Date;
 
-  constructor(props: UserProps) {
+  constructor(props: UserProps, containsSecurePassword: boolean) {
+    if (typeof containsSecurePassword === "undefined") {
+      throw new Error("Cannot be called directly, use the build method");
+    }
+
     this.firstName = props.firstName;
     this.lastName = props.lastName;
     this.email = props.email;
@@ -36,6 +43,12 @@ export class User {
     if (props.id) this.id = props.id;
     if (props.createdAt) this.createdAt = props.createdAt;
     if (props.updatedAt) this.updatedAt = props.updatedAt;
+  }
+
+  static async build(props: UserProps) {
+    const securePassword = await bcrypt.hash(props.password, saltRounds);
+    props.password = securePassword;
+    return new User(props, true);
   }
 
   toDTO(): UserDTO {
@@ -52,14 +65,17 @@ export class User {
   }
 
   static fromDTO(userDTO: UserDTO) {
-    return new User({
-      id: userDTO.id,
-      firstName: userDTO.firstName,
-      lastName: userDTO.lastName,
-      email: userDTO.email,
-      password: userDTO.password,
-      createdAt: new Date(userDTO.createdAt),
-      updatedAt: new Date(userDTO.updatedAt),
-    });
+    return new User(
+      {
+        id: userDTO.id,
+        firstName: userDTO.firstName,
+        lastName: userDTO.lastName,
+        email: userDTO.email,
+        password: userDTO.password,
+        createdAt: new Date(userDTO.createdAt),
+        updatedAt: new Date(userDTO.updatedAt),
+      },
+      true
+    );
   }
 }

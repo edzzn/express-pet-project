@@ -5,12 +5,13 @@ block user_content
   br
 
 
-  table.table-auto.w-full.mt-12
+  table.table-fixed.w-full.mt-12
     thead
       tr
         th Name
         th Email
         th Created At
+        th(class="w-1/6") Password
         th Actions
     tbody
       for user in users
@@ -18,6 +19,7 @@ block user_content
           td= `${user.firstName} ${user.lastName}`
           td= user.email
           td= user.createdAt
+          td.overflow-ellipsis.overflow-hidden= user.password
           td
             .flex.m-2
               a.rounded-r-none.px-4.py-2.rounded.bg-blue-100.text-blue-700.border(href=`/users/${user.id}`)

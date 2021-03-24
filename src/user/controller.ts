@@ -5,7 +5,7 @@ import { UsersRepository } from "./repository";
 import { User } from "./user";
 
 export async function getUserListController(req: Request, res: Response) {
-  const usersDTO = await UsersRepository.findAllUsers();
+  const usersDTO = await UsersRepository.findAllUsers(10);
 
   const users = usersDTO.map((user) => User.fromDTO(user));
 
@@ -35,7 +35,12 @@ export async function postUserSignUp(req: Request, res: Response) {
   const lastName = req.body?.lastName;
 
   if (email && password && firstName && lastName) {
-    const user: User = new User({ email, password, firstName, lastName });
+    const user: User = await User.build({
+      email,
+      password,
+      firstName,
+      lastName,
+    });
 
     await UsersRepository.createUser(user);
     res.redirect("/users");
@@ -59,12 +64,13 @@ export function getUserAdd(req: Request, res: Response) {
 }
 
 export async function postUserAdd(req: Request, res: Response) {
-  const userWithChanges = new User({
+  const userWithChanges = await User.build({
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     email: req.body.email,
     password: req.body.password,
   });
+
   await UsersRepository.createUser(userWithChanges);
 
   res.redirect("/users");
@@ -80,13 +86,16 @@ export async function getUserEditByID(req: Request, res: Response) {
 }
 
 export async function postUserEditByID(req: Request, res: Response) {
-  const userWithChanges = new User({
-    id: req.params.id,
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    email: req.body.email,
-    password: req.body.password,
-  });
+  const userWithChanges = new User(
+    {
+      id: req.params.id,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      password: req.body.password,
+    },
+    true
+  );
 
   const userDTO = await UsersRepository.updateUser(userWithChanges);
 
