@@ -9,7 +9,14 @@ export async function getUserListController(req: Request, res: Response) {
 
   const users = usersDTO.map((user) => User.fromDTO(user));
 
-  res.render("user/list_users", { title: `User List`, users: users });
+  const messages = await req.consumeFlash("info");
+  const warnings = await req.consumeFlash("warning");
+  res.render("user/list_users", {
+    title: `User List`,
+    users: users,
+    messages,
+    warnings,
+  });
 }
 
 export async function getUserByID(req: Request, res: Response) {
@@ -18,7 +25,14 @@ export async function getUserByID(req: Request, res: Response) {
 
   const user = User.fromDTO(userDTO);
 
-  res.render("user/profile", { title: `User: ${userId}`, user: user });
+  const messages = await req.consumeFlash("info");
+  const warnings = await req.consumeFlash("warning");
+  res.render("user/profile", {
+    title: `User: ${userId}`,
+    user: user,
+    messages,
+    warnings,
+  });
 }
 
 export function getUserSignUp(req: Request, res: Response) {
@@ -73,6 +87,7 @@ export async function postUserAdd(req: Request, res: Response) {
 
   await UsersRepository.createUser(userWithChanges);
 
+  await req.flash("info", "User created!");
   res.redirect("/users");
 }
 
@@ -82,7 +97,14 @@ export async function getUserEditByID(req: Request, res: Response) {
 
   const user = User.fromDTO(userDTO);
 
-  res.render("user/edit", { title: `Edit user: ${userId}`, user: user });
+  const messages = await req.consumeFlash("info");
+  const warnings = await req.consumeFlash("warning");
+  res.render("user/edit", {
+    title: `Edit user: ${userId}`,
+    user: user,
+    messages,
+    warnings,
+  });
 }
 
 export async function postUserEditByID(req: Request, res: Response) {
@@ -101,6 +123,7 @@ export async function postUserEditByID(req: Request, res: Response) {
 
   const updatedUser = User.fromDTO(userDTO);
 
+  await req.flash("info", "User edited!");
   res.redirect(`/users/${updatedUser.id}/edit`);
 }
 
@@ -108,6 +131,6 @@ export async function getDeleteUserByID(req: Request, res: Response) {
   const userId = req.params.id;
   await UsersRepository.deleteUseById(userId);
 
-  // TODO: Add success messages (flash-express)
+  await req.flash("warning", "User deleted!");
   res.redirect("/users");
 }

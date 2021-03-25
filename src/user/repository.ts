@@ -22,6 +22,7 @@ export class UsersRepository {
   }
 
   static async createUser(user: User): Promise<UserDTO> {
+    // TODO: Add a transaction
     const userDTO = user.toDTO();
     const newUser = await UserModelCtor.create(userDTO);
     if (!newUser) throw new Error("Error creating user");

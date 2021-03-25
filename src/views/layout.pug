@@ -5,6 +5,16 @@ html
     link(href='/stylesheets/style.css' rel='stylesheet')
   body
     .antialiased.mx-auto.max-w-screen-lg.m-9
+      if messages
+        ul
+          for msg in messages
+            li.rounded.p-4.bg-green-100.text-green-700.border= msg
+      if warnings
+        ul
+          for msg in warnings
+            li.rounded.p-4.bg-yellow-100.text-yellow-700.border= msg
+
+    .antialiased.mx-auto.max-w-screen-lg.m-9
       block content_header
     block content
     block debug
