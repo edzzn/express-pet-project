@@ -1,5 +1,6 @@
 import Model from "sequelize/types/lib/model";
-import { User as UserModelCtor } from "../models/sequelize";
+// import { User as UserModelCtor } from "../models/_sequelize";
+import { db } from "../models";
 import { User, UserDTO } from "./user";
 
 export class UsersRepository {
