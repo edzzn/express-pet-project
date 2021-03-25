@@ -1,5 +1,5 @@
 import Model from "sequelize/types/lib/model";
-import { User as UserModelCtor } from "../models/sequelize";
+import { User as UserModelCtor, sequelize } from "../models/sequelize";
 import { User, UserDTO } from "./user";
 
 export class UsersRepository {
@@ -22,12 +22,19 @@ export class UsersRepository {
   }
 
   static async createUser(user: User): Promise<UserDTO> {
-    // TODO: Add a transaction
-    const userDTO = user.toDTO();
-    const newUser = await UserModelCtor.create(userDTO);
-    if (!newUser) throw new Error("Error creating user");
+    const t = await sequelize.transaction();
 
-    return userDTO;
+    try {
+      const userDTO = user.toDTO();
+      const newUser = await UserModelCtor.create(userDTO, { transaction: t });
+      // Other action can be added using the same transaction parameter
+      // const newUser = await UserModelCtor.create(userDTO, { transaction: t });
+      await t.commit();
+      return userModelToUserDTO(newUser);
+    } catch (error) {
+      await t.rollback();
+      throw new Error("Error creating user");
+    }
   }
 
   static async updateUser(userWithChanges: User): Promise<UserDTO> {
