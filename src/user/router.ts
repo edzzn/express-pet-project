@@ -5,18 +5,13 @@ import {
   getUserByID,
   getUserEditByID,
   getUserListController,
-  getUserSignUp,
   postUserAdd,
   postUserEditByID,
-  postUserSignUp,
 } from "./controller";
 
 export const userRouter = express.Router();
 
 userRouter.get("/", getUserListController);
-
-userRouter.get("/signup", getUserSignUp);
-userRouter.post("/signup", postUserSignUp);
 
 userRouter.get("/add", getUserAdd);
 userRouter.post("/add", postUserAdd);

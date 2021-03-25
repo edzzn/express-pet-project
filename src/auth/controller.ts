@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import url from "url";
 import { WarningMessage } from "../core/types";
+import { ValueObject } from "../core/valueObject";
 import { UsersRepository } from "../user/repository";
 import { User } from "../user/user";
 
@@ -18,14 +19,27 @@ export async function postSignUp(req: Request, res: Response) {
   const lastName = req.body?.lastName;
 
   if (email && password && firstName && lastName) {
-    const user: User = await User.build({
+    const userValueObject: ValueObject<User> = await User.build({
       email,
       password,
       firstName,
       lastName,
     });
 
-    await UsersRepository.createUser(user);
+    if (userValueObject.ok) {
+      await UsersRepository.createUser(userValueObject.value);
+    } else {
+      const warningMessage = "There was an error signing up, please try again";
+      res.redirect(
+        // TODO: replace deprecated
+        url.format({
+          pathname: "/users/signup/",
+          query: {
+            error: userValueObject.message,
+          },
+        })
+      );
+    }
     res.redirect("/users");
   } else {
     const warningMessage = "There was an error signing up, please try again";

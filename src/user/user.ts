@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import { ValueObject } from "../core/valueObject";
 const saltRounds = 10;
 
 interface UserProps {
@@ -45,10 +46,16 @@ export class User {
     if (props.updatedAt) this.updatedAt = props.updatedAt;
   }
 
-  static async build(props: UserProps) {
+  static async build(props: UserProps): Promise<ValueObject<User>> {
+    // Validation
+    // This can be moved to a Validator class if necessary
+    if (props.password.length <= 5) {
+      return { ok: false, message: "The password is too short." };
+    }
+
     const securePassword = await bcrypt.hash(props.password, saltRounds);
     props.password = securePassword;
-    return new User(props, true);
+    return { ok: true, value: new User(props, true) };
   }
 
   toDTO(): UserDTO {
@@ -64,7 +71,7 @@ export class User {
     return userDTO;
   }
 
-  static fromDTO(userDTO: UserDTO) {
+  static fromDTO(userDTO: UserDTO): User {
     return new User(
       {
         id: userDTO.id,

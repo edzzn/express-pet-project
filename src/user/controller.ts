@@ -35,60 +35,28 @@ export async function getUserByID(req: Request, res: Response) {
   });
 }
 
-export function getUserSignUp(req: Request, res: Response) {
-  const warningMessage: WarningMessage = {
-    message: req.query?.error?.toString() || "",
-  };
-  res.render("user/sign_up", { warningMessage });
-}
-
-export async function postUserSignUp(req: Request, res: Response) {
-  const email = req.body?.email;
-  const password = req.body?.password;
-  const firstName = req.body?.firstName;
-  const lastName = req.body?.lastName;
-
-  if (email && password && firstName && lastName) {
-    const user: User = await User.build({
-      email,
-      password,
-      firstName,
-      lastName,
-    });
-
-    await UsersRepository.createUser(user);
-    res.redirect("/users");
-  } else {
-    const warningMessage = "There was an error signing up, please try again";
-
-    res.redirect(
-      // TODO: replace deprecated
-      url.format({
-        pathname: "/users/signup/",
-        query: {
-          error: warningMessage,
-        },
-      })
-    );
-  }
-}
-
-export function getUserAdd(req: Request, res: Response) {
-  res.render("user/add", { title: `Add user` });
+export async function getUserAdd(req: Request, res: Response) {
+  const messages = await req.consumeFlash("info");
+  const warnings = await req.consumeFlash("warning");
+  res.render("user/add", { title: `Add user`, messages, warnings });
 }
 
 export async function postUserAdd(req: Request, res: Response) {
-  const userWithChanges = await User.build({
+  const userWithChangesValueObject = await User.build({
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     email: req.body.email,
     password: req.body.password,
   });
 
-  await UsersRepository.createUser(userWithChanges);
-
-  await req.flash("info", "User created!");
-  res.redirect("/users");
+  if (userWithChangesValueObject.ok) {
+    await UsersRepository.createUser(userWithChangesValueObject.value);
+    await req.flash("info", "User created!");
+    res.redirect("/users");
+  } else {
+    await req.flash("warning", userWithChangesValueObject.message);
+    res.redirect("/users/add");
+  }
 }
 
 export async function getUserEditByID(req: Request, res: Response) {
