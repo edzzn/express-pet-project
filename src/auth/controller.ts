@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import url from "url";
 import { WarningMessage } from "../core/types";
-import { ValueObject } from "../core/valueObject";
+import { ValueOrFailure } from "../core/valueObject";
 import { UsersRepository } from "../user/repository";
 import { User } from "../user/user";
 
@@ -9,7 +9,8 @@ export function getSignUp(req: Request, res: Response) {
   const warningMessage: WarningMessage = {
     message: req.query?.error?.toString() || "",
   };
-  res.render("auth/sign_up", { warningMessage });
+  const authmessage = req.authInfo;
+  res.render("auth/sign_up", { warningMessage, authmessage });
 }
 
 export async function postSignUp(req: Request, res: Response) {
@@ -19,15 +20,15 @@ export async function postSignUp(req: Request, res: Response) {
   const lastName = req.body?.lastName;
 
   if (email && password && firstName && lastName) {
-    const userValueObject: ValueObject<User> = await User.build({
+    const userValueOrFailure: ValueOrFailure<User> = await User.build({
       email,
       password,
       firstName,
       lastName,
     });
 
-    if (userValueObject.ok) {
-      await UsersRepository.createUser(userValueObject.value);
+    if (userValueOrFailure.ok) {
+      await UsersRepository.createUser(userValueOrFailure.value);
     } else {
       const warningMessage = "There was an error signing up, please try again";
       res.redirect(
@@ -35,7 +36,7 @@ export async function postSignUp(req: Request, res: Response) {
         url.format({
           pathname: "/users/signup/",
           query: {
-            error: userValueObject.message,
+            error: userValueOrFailure.message,
           },
         })
       );
@@ -60,5 +61,6 @@ export function getSignIn(req: Request, res: Response) {
   const warningMessage: WarningMessage = {
     message: req.query?.error?.toString() || "",
   };
-  res.render("auth/sign_in", { warningMessage });
+  const authmessage = req.authInfo;
+  res.render("auth/sign_in", { warningMessage, authmessage });
 }

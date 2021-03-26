@@ -1,5 +1,5 @@
-import bcrypt from "bcrypt";
-import { ValueObject } from "../core/valueObject";
+import bcrypt, { hash } from "bcrypt";
+import { ValueOrFailure } from "../core/valueObject";
 const saltRounds = 10;
 
 interface UserProps {
@@ -46,7 +46,7 @@ export class User {
     if (props.updatedAt) this.updatedAt = props.updatedAt;
   }
 
-  static async build(props: UserProps): Promise<ValueObject<User>> {
+  static async build(props: UserProps): Promise<ValueOrFailure<User>> {
     // Validation
     // This can be moved to a Validator class if necessary
     if (props.password.length <= 5) {
@@ -69,6 +69,10 @@ export class User {
       updatedAt: (this.createdAt || new Date()).toISOString(),
     };
     return userDTO;
+  }
+
+  async verifyPassword(password: string): Promise<boolean> {
+    return await bcrypt.compare(password, this.password);
   }
 
   static fromDTO(userDTO: UserDTO): User {

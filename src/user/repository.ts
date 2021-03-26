@@ -1,6 +1,9 @@
 import Model from "sequelize/types/lib/model";
 import { User as UserModelCtor, sequelize } from "../models/sequelize";
+import { FindOptions } from "sequelize";
+
 import { User, UserDTO } from "./user";
+import { ValueOrFailure } from "../core/valueObject";
 
 export class UsersRepository {
   static async findAllUsers(limit = 5): Promise<UserDTO[]> {
@@ -19,6 +22,15 @@ export class UsersRepository {
     if (!user) throw new Error("Error fetching user by id");
 
     return userModelToUserDTO(user);
+  }
+
+  static async findUserByEmail(
+    email: string
+  ): Promise<ValueOrFailure<UserDTO>> {
+    const user = await UserModelCtor.findOne({ where: { email: email } });
+    if (!user) return { ok: false, message: "Can't find user by email" };
+
+    return { ok: true, value: userModelToUserDTO(user) };
   }
 
   static async createUser(user: User): Promise<UserDTO> {

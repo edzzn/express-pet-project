@@ -2,7 +2,11 @@ import { NextFunction, Request, Response } from "express";
 import createError, { HttpError } from "http-errors";
 
 export function getIndex(req: Request, res: Response) {
-  res.render("index");
+  console.log("----------------*-----------------");
+  console.log(req.user);
+  console.log("----------------*-----------------");
+
+  res.render("index", { user: req.user });
 }
 
 export function handle404(req: Request, res: Response, next: NextFunction) {

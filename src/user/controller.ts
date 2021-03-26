@@ -42,19 +42,19 @@ export async function getUserAdd(req: Request, res: Response) {
 }
 
 export async function postUserAdd(req: Request, res: Response) {
-  const userWithChangesValueObject = await User.build({
+  const userWithChangesValueOrFailure = await User.build({
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     email: req.body.email,
     password: req.body.password,
   });
 
-  if (userWithChangesValueObject.ok) {
-    await UsersRepository.createUser(userWithChangesValueObject.value);
+  if (userWithChangesValueOrFailure.ok) {
+    await UsersRepository.createUser(userWithChangesValueOrFailure.value);
     await req.flash("info", "User created!");
     res.redirect("/users");
   } else {
-    await req.flash("warning", userWithChangesValueObject.message);
+    await req.flash("warning", userWithChangesValueOrFailure.message);
     res.redirect("/users/add");
   }
 }
