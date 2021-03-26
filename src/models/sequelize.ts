@@ -10,6 +10,6 @@ export const sequelize = new Sequelize(process.env.MODULE_5_DATABASE_URL, {
 
 export const User = UserModel(sequelize);
 
-sequelize.sync({ force: false }).then(() => {
-  console.log(`Database & tables created!`);
-});
+// sequelize.sync({ force: false }).then(() => {
+//   console.log(`Database & tables created!`);
+// });
