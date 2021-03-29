@@ -1,4 +1,4 @@
-import bcrypt, { hash } from "bcrypt";
+import * as bcrypt from "bcrypt";
 import { ValueOrFailure } from "../core/valueObject";
 const saltRounds = 10;
 
