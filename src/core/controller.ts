@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import createError, { HttpError } from "http-errors";
 
-export function getIndex(req: Request, res: Response) {
-  console.log("----------------*-----------------");
-  console.log(req.user);
-  console.log("----------------*-----------------");
+export async function getIndex(req: Request, res: Response) {
+  const infos = await req.consumeFlash("info");
+  const warnings = await req.consumeFlash("warning");
+  const success = await req.consumeFlash("success");
 
-  res.render("index", { user: req.user });
+  res.render("index", { user: req.user, infos, warnings, success });
 }
 
 export function handle404(req: Request, res: Response, next: NextFunction) {

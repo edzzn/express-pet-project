@@ -1,6 +1,5 @@
 import PassportLocalStrategy from "passport-local";
 import { UsersRepository } from "../user/repository";
-import bcrypt from "bcrypt";
 import passport from "passport";
 import { User } from "../user/user";
 

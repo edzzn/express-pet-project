@@ -8,5 +8,8 @@ export const mainRouter = express.Router();
 
 mainRouter.get("/", getIndex);
 mainRouter.use("/", authRouter);
-mainRouter.use("/users", userRouter);
-// mainRouter.use("/users", connectEnsureLogin.ensureLoggedIn(), userRouter);
+mainRouter.use(
+  "/users",
+  connectEnsureLogin.ensureLoggedIn({ redirectTo: "/signin" }),
+  userRouter
+);

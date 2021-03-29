@@ -1,6 +1,4 @@
 import { Request, Response } from "express";
-import url from "url";
-import { WarningMessage } from "../core/types";
 import { UsersRepository } from "./repository";
 import { User } from "./user";
 
@@ -9,13 +7,16 @@ export async function getUserListController(req: Request, res: Response) {
 
   const users = usersDTO.map((user) => User.fromDTO(user));
 
-  const messages = await req.consumeFlash("info");
+  const infos = await req.consumeFlash("info");
   const warnings = await req.consumeFlash("warning");
+  const success = await req.consumeFlash("success");
+
   res.render("user/list_users", {
     title: `User List`,
     users: users,
-    messages,
+    infos,
     warnings,
+    success,
   });
 }
 
@@ -25,20 +26,25 @@ export async function getUserByID(req: Request, res: Response) {
 
   const user = User.fromDTO(userDTO);
 
-  const messages = await req.consumeFlash("info");
+  const infos = await req.consumeFlash("info");
   const warnings = await req.consumeFlash("warning");
+  const success = await req.consumeFlash("success");
+
   res.render("user/profile", {
     title: `User: ${userId}`,
     user: user,
-    messages,
+    infos,
     warnings,
+    success,
   });
 }
 
 export async function getUserAdd(req: Request, res: Response) {
-  const messages = await req.consumeFlash("info");
+  const infos = await req.consumeFlash("info");
   const warnings = await req.consumeFlash("warning");
-  res.render("user/add", { title: `Add user`, messages, warnings });
+  const success = await req.consumeFlash("warning");
+
+  res.render("user/add", { title: `Add user`, infos, warnings, success });
 }
 
 export async function postUserAdd(req: Request, res: Response) {
@@ -65,13 +71,16 @@ export async function getUserEditByID(req: Request, res: Response) {
 
   const user = User.fromDTO(userDTO);
 
-  const messages = await req.consumeFlash("info");
+  const infos = await req.consumeFlash("info");
   const warnings = await req.consumeFlash("warning");
+  const success = await req.consumeFlash("success");
+
   res.render("user/edit", {
     title: `Edit user: ${userId}`,
     user: user,
-    messages,
+    infos,
     warnings,
+    success,
   });
 }
 

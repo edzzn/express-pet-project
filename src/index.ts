@@ -24,7 +24,8 @@ app.use(
   })
 );
 
-app.use(flash({ sessionKeyName: "flashMessage", useCookieSession: true }));
+// apply express-flash-message middleware
+app.use(flash({ sessionKeyName: "flashMessage" }));
 
 app.use(express.static(__dirname + "/../public"));
 app.use(express.urlencoded({ extended: true }));

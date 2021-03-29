@@ -30,30 +30,19 @@ export async function postSignUp(req: Request, res: Response) {
     if (userValueOrFailure.ok) {
       await UsersRepository.createUser(userValueOrFailure.value);
     } else {
-      const warningMessage = "There was an error signing up, please try again";
-      res.redirect(
-        // TODO: replace deprecated
-        url.format({
-          pathname: "/users/signup/",
-          query: {
-            error: userValueOrFailure.message,
-          },
-        })
+      await req.flash(
+        "warning",
+        "There was an error signing up, please try again"
       );
+      res.redirect("/users/signup/");
     }
+    await req.flash("success", "User created");
     res.redirect("/users");
   } else {
     const warningMessage = "There was an error signing up, please try again";
 
-    res.redirect(
-      // TODO: replace deprecated
-      url.format({
-        pathname: "/users/signup/",
-        query: {
-          error: warningMessage,
-        },
-      })
-    );
+    await req.flash("warning", warningMessage);
+    res.redirect("/users/signup/");
   }
 }
 
