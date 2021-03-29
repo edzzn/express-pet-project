@@ -6,10 +6,8 @@ import { User, UserDTO } from "./user";
 import { ValueOrFailure } from "../core/valueObject";
 
 export class UsersRepository {
-  static async findAllUsers(limit = 5): Promise<UserDTO[]> {
-    const users = await UserModelCtor.findAll({
-      limit,
-    });
+  static async findAllUsers(): Promise<UserDTO[]> {
+    const users = await UserModelCtor.findAll({});
 
     if (!users) throw new Error("Error fetching all users");
 

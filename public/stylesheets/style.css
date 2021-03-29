@@ -31198,6 +31198,34 @@ h5 {
   font-weight: 400;
 }
 
+.dropdown {
+  position: relative;
+  display: inline-block;
+  border-radius: 0.25rem;
+  padding: 1rem;
+  border-width: 1px;
+  width: 12rem;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  width: 12rem;
+  border-width: 1px;
+  --tw-bg-opacity: 1;
+  background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
+}
+
+.dropdown-content p {
+  padding: 0.75rem;
+  border-width: 1px;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
 @media (min-width: 640px) {
   .sm\:container {
     width: 100%;

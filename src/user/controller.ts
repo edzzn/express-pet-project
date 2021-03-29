@@ -1,11 +1,34 @@
 import { Request, Response } from "express";
 import { UsersRepository } from "./repository";
 import { User } from "./user";
+import { filterABC, findABCUserOccurrences, sortUsersByName } from "./utils";
 
 export async function getUserListController(req: Request, res: Response) {
-  const usersDTO = await UsersRepository.findAllUsers(10);
+  const usersDTO = await UsersRepository.findAllUsers();
+  const searchQuery: string =
+    req.query.search?.toString().toLocaleLowerCase() || "";
+  const action: string = req.query.action?.toString().toLocaleLowerCase() || "";
 
-  const users = usersDTO.map((user) => User.fromDTO(user));
+  let users = usersDTO.map((user) => User.fromDTO(user));
+
+  if (searchQuery)
+    users = users.filter((user) =>
+      `${user.firstName} ${user.lastName}`
+        .toLocaleLowerCase()
+        .includes(searchQuery)
+    );
+
+  console.log(`action: "${action}"`);
+
+  if (action === "sort-name") {
+    users = sortUsersByName(users);
+  }
+
+  let usersOccurrences;
+  if (action === "show-abc") {
+    users = filterABC(users);
+    usersOccurrences = findABCUserOccurrences(users);
+  }
 
   const infos = await req.consumeFlash("info");
   const warnings = await req.consumeFlash("warning");
@@ -17,6 +40,9 @@ export async function getUserListController(req: Request, res: Response) {
     infos,
     warnings,
     success,
+    searchQuery,
+    action,
+    usersOccurrences,
   });
 }
 

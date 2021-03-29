@@ -29,3 +29,30 @@ h5 {
   @apply text-xl;
   @apply font-normal;
 }
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+  @apply rounded;
+  @apply p-4;
+  @apply border;
+  @apply w-48;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  @apply w-48;
+  @apply border;
+  @apply bg-white;
+}
+
+.dropdown-content p {
+  @apply p-3;
+  @apply border;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
